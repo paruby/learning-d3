@@ -69,6 +69,83 @@ function type(d) {
 }
 </script>
 
+<svg width="720" height="120" id="circle_canvas">
+</svg>
+<script>
+var canvas = d3.select("#circle_canvas");
+//var data = [[20,30],[40,30],[60,30],[80,20],[100,10]];
+var data = d3.range(5)
+          .map(function(){
+            return {
+              x: Math.random() * 200,
+              y: Math.random() * 20 + 10
+            }
+            ;})
+canvas.selectAll("circle")
+  .data(data)
+.enter().append("circle")
+  .attr("fill","steelblue")
+  .attr("r",function(d){return 5;})
+  .attr("cx",function(d){return d.x;})
+  .attr("cy",function(d){return d.y;})
+  .on("mouseover",function(){
+    d3.select(this)
+      .attr("fill","black")
+    ;})
+  .on("mouseout",function(){
+    d3.select(this)
+      .attr("fill","steelblue")
+  ;})
+  .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragging)
+      .on("end", dragended));
+
+canvas.on("dblclick",function(){
+    var position = d3.mouse(this)
+    data = d3.select(this).selectAll("circle").data()
+    data.push({
+      x: position[0],
+      y: position[1]
+    })
+    d3.select(this).selectAll("circle")
+      .data(data)
+    .enter().append("circle")
+      .attr("fill","steelblue")
+      .attr("r",10)
+      .attr("cx",function(d){return d.x;})
+      .attr("cy",function(d){return d.y;})
+      .on("mouseover",function(){
+        d3.select(this)
+          .attr("fill","black")
+        ;})
+      .on("mouseout",function(){
+        d3.select(this)
+          .attr("fill","steelblue")
+      ;})
+      .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragging)
+          .on("end", dragended));
+  ;})
+
+function dragstarted(){
+  d3.select(this).raise()
+    .attr("fill","red")
+}
+function dragging(d){
+  d3.select(this)
+    .attr("fill","green")
+    .attr("cx", d.x = d3.event.x)
+    .attr("cy", d.y = d3.event.y)
+}
+function dragended(){
+  d3.select(this)
+    .attr("fill","steelblue")
+}
+
+
+</script>
 
 </body>
 </html>
