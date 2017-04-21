@@ -37,7 +37,7 @@ var chart = d3.select(".chart")
 var x = d3.scaleLinear()
       .range([0,width]);
 
-d3.tsv("/data/demo_data1.tsv", type, function(error, data){
+d3.tsv("../data/demo_data1.tsv", type, function(error, data){
   chart.attr("height", barHeight * data.length);
   x.domain([0,d3.max(data, function(d){return d.value})]);
 
